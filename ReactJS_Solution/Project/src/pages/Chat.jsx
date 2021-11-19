@@ -4,16 +4,9 @@ import { useParams } from "react-router-dom";
 
 import { AuthContext } from "../AuthContextProvider";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import * as Yup from "yup";
-
 import apiClient from "../apiClient";
 
 import ChatMessage from "../components/ChatMessage";
-
-const validation_schema = Yup.object().shape({
-  message_text: Yup.string().required("Wiadomość nie może być pusta"),
-});
 
 const Chat = () => {
   const params = useParams(); // Pobierz parametry ścieżki url
@@ -21,6 +14,8 @@ const Chat = () => {
   const [messages, setMessages] = useState([]);
 
   const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+
+  const [messageText, setMessageText] = useState("");
 
   useEffect(() => {
     apiClient.getMessages(message_to_user_id).then((data) => {
@@ -66,35 +61,34 @@ const Chat = () => {
         </div>
       </div>
       <div>
-        <Formik
-          validationSchema={validation_schema}
-          initialValues={{
-            message_text: "",
-          }}
-          onSubmit={(values) => {
-            // Ta funkcja zostanie wywołana tylko wtedy kiedy forma jest poprawna
-            console.log(values);
-            apiClient
-              .sendMessages(values.message_text, message_to_user_id)
-              .then((data) => {
-                console.log(data);
-                if (data.sending) {
-                  console.log("Wiadomość została wysłana");
-                }
-              });
-          }}
-        >
-          <Form>
-            <div>
-              <label>Wiadomość</label>
-              <Field type="text" as="textarea" name="message_text" />
-              <ErrorMessage name="message_text" />
-            </div>
-            <div>
-              <button type="submit">Wyślij wiadomość</button>
-            </div>
-          </Form>
-        </Formik>
+        <form>
+          <div>
+            <label>Wiadomość</label>
+            <input
+              type="text"
+              as="textarea"
+              onChange={(e) => setMessageText(e.target.value)}
+            />
+          </div>
+          <div>
+            <button
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                apiClient
+                  .sendMessages(messageText, message_to_user_id)
+                  .then((data) => {
+                    console.log(data);
+                    if (data.sending) {
+                      console.log("Wiadomość została wysłana");
+                    }
+                  });
+              }}
+            >
+              Wyślij wiadomość
+            </button>
+          </div>
+        </form>
       </div>
     </>
   );
