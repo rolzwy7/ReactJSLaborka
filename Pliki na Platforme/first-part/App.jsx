@@ -17,6 +17,7 @@ function App() {
         <Switch>
           <Route path="/register" component={RegisterPage} />
           <Route path="/login" component={LoginPage} />
+          {/* TODO: Route dla Chat.jsx */}
           {/* Default route */}
           <Route exact path="/">
             <UserListPage />

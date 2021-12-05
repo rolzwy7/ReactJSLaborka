@@ -10,7 +10,8 @@ const UserListPage = () => {
 
   // TODO: Jeśli użytkownik jest zalogowany ustaw listę użytkowników
 
-  // TODO: Jeśli zostanie utworzony nowy użytkownik zaktualizuj listę użytkowników przez WebSocket.
+  // TODO:WEBSOCKET Jeśli zostanie utworzony nowy użytkownik zaktualizuj
+  // listę użytkowników przez WebSocket.
 
   if (!isLoggedIn) {
     return <p>Zaloguj się aby wyświetlić użytkowników czatu</p>;
